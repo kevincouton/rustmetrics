@@ -5,6 +5,7 @@ pub mod providers;
 pub mod reporter;
 pub mod runner;
 
+pub use config::Config;
 pub use model::*;
 pub use providers::{MetricError, MetricProvider, ProviderOutput};
 
