@@ -5,6 +5,9 @@ pub mod providers;
 pub mod reporter;
 pub mod runner;
 
+pub use model::*;
+pub use providers::{MetricError, MetricProvider, ProviderOutput};
+
 use anyhow::Result;
 
 pub fn run() -> Result<()> {
