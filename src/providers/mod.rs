@@ -1,3 +1,4 @@
+pub mod coverage;
 pub mod dead_code;
 pub mod function_size;
 
