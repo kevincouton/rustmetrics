@@ -1,5 +1,7 @@
-use rustmetrics::run;
+use rustmetrics::{run, Args};
+use clap::Parser;
 
 fn main() -> anyhow::Result<()> {
-    run()
+    let args = Args::parse();
+    run(args)
 }
