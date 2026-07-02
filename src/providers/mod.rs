@@ -1,3 +1,4 @@
+pub mod dead_code;
 pub mod function_size;
 
 use crate::model::{CoverageSummary, DeadCodeItem, FunctionMetric};
