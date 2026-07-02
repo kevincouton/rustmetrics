@@ -1,0 +1,9 @@
+[providers]
+coverage = { enabled = true, command = "cargo-llvm-cov" }
+dead_code = { enabled = true, rustflags = "-W dead_code" }
+function_size = { enabled = true }
+
+[thresholds]
+min_line_coverage = 0.80
+max_function_lines = 100
+max_dead_code_items = 0
