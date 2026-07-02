@@ -1,3 +1,5 @@
+pub mod function_size;
+
 use crate::model::{CoverageSummary, DeadCodeItem, FunctionMetric};
 use std::path::Path;
 use thiserror::Error;
