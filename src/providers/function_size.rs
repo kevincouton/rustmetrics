@@ -20,13 +20,26 @@ impl FunctionSizeProvider {
 
         let tree = match parser.parse(source, None) {
             Some(tree) => tree,
-            None => return Vec::new(),
+            None => {
+                eprintln!(
+                    "warning: failed to parse Rust source in '{}'",
+                    file.display()
+                );
+                return Vec::new();
+            }
         };
 
         let query_str = "(function_item name: (identifier) @name) @function";
         let query = match Query::new(&language, query_str) {
             Ok(q) => q,
-            Err(_) => return Vec::new(),
+            Err(e) => {
+                eprintln!(
+                    "warning: failed to build tree-sitter query for '{}': {}",
+                    file.display(),
+                    e
+                );
+                return Vec::new();
+            }
         };
 
         let root = tree.root_node();
@@ -140,7 +153,10 @@ impl MetricProvider for FunctionSizeProvider {
 
             let source = match std::fs::read_to_string(path) {
                 Ok(s) => s,
-                Err(_) => continue,
+                Err(e) => {
+                    eprintln!("warning: failed to read '{}': {}", path.display(), e);
+                    continue;
+                }
             };
 
             let relative = path.strip_prefix(crate_root).unwrap_or(path).to_path_buf();
