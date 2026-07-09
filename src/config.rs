@@ -5,14 +5,14 @@ use std::path::{Path, PathBuf};
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CoverageProviderConfig {
     pub enabled: bool,
-    #[serde(default)]
+    #[serde(default = "default_coverage_command")]
     pub command: String,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct DeadCodeProviderConfig {
     pub enabled: bool,
-    #[serde(default)]
+    #[serde(default = "default_dead_code_rustflags")]
     pub rustflags: String,
 }
 
@@ -31,17 +31,25 @@ pub struct ProvidersConfig {
     pub function_size: FunctionSizeProviderConfig,
 }
 
+fn default_coverage_command() -> String {
+    "cargo-llvm-cov".to_string()
+}
+
+fn default_dead_code_rustflags() -> String {
+    "-W dead_code".to_string()
+}
+
 fn default_coverage() -> CoverageProviderConfig {
     CoverageProviderConfig {
         enabled: true,
-        command: "cargo-llvm-cov".to_string(),
+        command: default_coverage_command(),
     }
 }
 
 fn default_dead_code() -> DeadCodeProviderConfig {
     DeadCodeProviderConfig {
         enabled: true,
-        rustflags: "-W dead_code".to_string(),
+        rustflags: default_dead_code_rustflags(),
     }
 }
 

@@ -27,3 +27,23 @@ max_function_lines = 50
     assert!(!cfg.providers.coverage.enabled);
     assert_eq!(cfg.thresholds.max_function_lines, Some(50));
 }
+
+#[test]
+fn test_partial_provider_table_preserves_string_defaults() {
+    let toml = r#"
+[providers.coverage]
+enabled = true
+
+[providers.dead_code]
+enabled = true
+"#;
+    let dir = tempfile::tempdir().unwrap();
+    let path = dir.path().join("rustmetrics.toml");
+    std::fs::write(&path, toml).unwrap();
+
+    let cfg = Config::load(Some(&path)).unwrap();
+    assert!(cfg.providers.coverage.enabled);
+    assert_eq!(cfg.providers.coverage.command, "cargo-llvm-cov");
+    assert!(cfg.providers.dead_code.enabled);
+    assert_eq!(cfg.providers.dead_code.rustflags, "-W dead_code");
+}
