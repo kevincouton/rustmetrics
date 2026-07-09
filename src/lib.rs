@@ -11,10 +11,20 @@ pub use model::*;
 pub use providers::{MetricError, MetricProvider, ProviderOutput};
 pub use runner::Runner;
 
+use crate::reporter::reporter_for;
 use anyhow::Result;
 
 pub fn run(args: Args) -> Result<()> {
-    let _config = Config::load(args.config.as_deref())?;
-    println!("rustmetrics CLI ready");
-    Ok(())
+    let config = Config::load(args.config.as_deref())?;
+    let runner = Runner::new(config, args);
+    let report = runner.run()?;
+
+    let reporter = reporter_for(runner.format());
+    println!("{}", reporter.render(&report));
+
+    if report.threshold_violations.is_empty() {
+        Ok(())
+    } else {
+        std::process::exit(1);
+    }
 }
