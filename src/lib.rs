@@ -9,6 +9,7 @@ pub use cli::Args;
 pub use config::Config;
 pub use model::*;
 pub use providers::{MetricError, MetricProvider, ProviderOutput};
+pub use runner::Runner;
 
 use anyhow::Result;
 
