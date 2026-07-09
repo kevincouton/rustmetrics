@@ -56,8 +56,7 @@ impl Runner {
                 Ok(ProviderOutput::DeadCode(items)) => report.dead_code.extend(items),
                 Ok(ProviderOutput::FunctionSizes(metrics)) => report.function_sizes.extend(metrics),
                 Err(e) => {
-                    eprintln!("provider {} failed: {}", provider.name(), e);
-                    anyhow::bail!(e);
+                    anyhow::bail!("provider {} failed: {}", provider.name(), e);
                 }
             }
         }
