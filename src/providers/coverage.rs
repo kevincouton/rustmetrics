@@ -14,15 +14,20 @@ impl CoverageProvider {
     }
 
     pub fn parse_json(&self, text: &str) -> Result<CoverageSummary, MetricError> {
-        let report: LlvmCovReport = serde_json::from_str(text).map_err(|e| MetricError::ParseError {
-            provider: "coverage".to_string(),
-            source: e.into(),
-        })?;
+        let report: LlvmCovReport =
+            serde_json::from_str(text).map_err(|e| MetricError::ParseError {
+                provider: "coverage".to_string(),
+                source: e.into(),
+            })?;
 
-        let data = report.data.into_iter().next().ok_or_else(|| MetricError::ParseError {
-            provider: "coverage".to_string(),
-            source: anyhow::anyhow!("no data section in coverage report"),
-        })?;
+        let data = report
+            .data
+            .into_iter()
+            .next()
+            .ok_or_else(|| MetricError::ParseError {
+                provider: "coverage".to_string(),
+                source: anyhow::anyhow!("no data section in coverage report"),
+            })?;
 
         let lines = data.totals.lines;
         let line_rate = if lines.count == 0 {
@@ -73,31 +78,26 @@ impl MetricProvider for CoverageProvider {
     }
 
     fn collect(&self, crate_root: &Path) -> Result<ProviderOutput, MetricError> {
-        let (program, args): (&str, &[&str]) = match self.command.as_str() {
-            "cargo-llvm-cov" => ("cargo", &["llvm-cov", "--json"]),
-            other => {
-                return Err(MetricError::ToolNotFound {
-                    tool: other.to_string(),
-                })
-            }
-        };
-
-        let output = Command::new(program)
-            .args(args)
-            .current_dir(crate_root)
-            .output()
-            .map_err(|e| {
-                if e.kind() == std::io::ErrorKind::NotFound {
-                    MetricError::ToolNotFound {
-                        tool: self.command.clone(),
-                    }
-                } else {
-                    MetricError::CommandFailed {
-                        command: self.command.clone(),
-                        source: e,
-                    }
+        let output = if self.command == "cargo-llvm-cov" {
+            Command::new("cargo")
+                .args(["llvm-cov", "--json"])
+                .current_dir(crate_root)
+                .output()
+        } else {
+            Command::new(&self.command).current_dir(crate_root).output()
+        }
+        .map_err(|e| {
+            if e.kind() == std::io::ErrorKind::NotFound {
+                MetricError::ToolNotFound {
+                    tool: self.command.clone(),
                 }
-            })?;
+            } else {
+                MetricError::CommandFailed {
+                    command: self.command.clone(),
+                    source: e,
+                }
+            }
+        })?;
 
         if !output.status.success() {
             return Err(MetricError::CommandExit {

@@ -1,10 +1,10 @@
+use clap::Parser;
 use rustmetrics::cli::Args;
 use rustmetrics::config::Config;
 use rustmetrics::model::{CoverageSummary, DeadCodeItem, FunctionMetric};
 use rustmetrics::providers::ProviderOutput;
 use rustmetrics::providers::{MetricError, MetricProvider};
 use rustmetrics::runner::Runner;
-use clap::Parser;
 use std::path::{Path, PathBuf};
 use std::sync::Arc;
 

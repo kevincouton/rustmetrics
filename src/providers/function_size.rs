@@ -5,6 +5,12 @@ use tree_sitter::{Node, Parser, Query, QueryCursor};
 
 pub struct FunctionSizeProvider;
 
+impl Default for FunctionSizeProvider {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 impl FunctionSizeProvider {
     pub fn new() -> Self {
         Self

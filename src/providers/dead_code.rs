@@ -14,7 +14,12 @@ impl DeadCodeProvider {
     }
 
     pub fn parse_messages(&self, jsonl: &str, _crate_root: PathBuf) -> Vec<DeadCodeItem> {
+        self.parse_output(jsonl, _crate_root).0
+    }
+
+    fn parse_output(&self, jsonl: &str, _crate_root: PathBuf) -> (Vec<DeadCodeItem>, bool) {
         let mut items = Vec::new();
+        let mut has_error = false;
 
         for line in jsonl.lines() {
             let line = line.trim();
@@ -27,6 +32,11 @@ impl DeadCodeProvider {
             };
 
             if message.reason != "compiler-message" {
+                continue;
+            }
+
+            if message.message.level == "error" {
+                has_error = true;
                 continue;
             }
 
@@ -54,7 +64,16 @@ impl DeadCodeProvider {
             });
         }
 
-        items
+        (items, has_error)
+    }
+
+    fn rustflags_env(&self) -> String {
+        match std::env::var("RUSTFLAGS") {
+            Ok(existing) if !existing.trim().is_empty() => {
+                format!("{} {}", existing.trim(), self.rustflags)
+            }
+            _ => self.rustflags.clone(),
+        }
     }
 }
 
@@ -93,6 +112,7 @@ struct CargoMessage {
 #[derive(Debug, Deserialize)]
 struct CompilerMessage {
     code: Option<MessageCode>,
+    level: String,
     message: String,
     spans: Vec<MessageSpan>,
 }
@@ -118,7 +138,7 @@ impl MetricProvider for DeadCodeProvider {
         let output = Command::new("cargo")
             .arg("check")
             .arg("--message-format=json")
-            .env("RUSTFLAGS", &self.rustflags)
+            .env("RUSTFLAGS", self.rustflags_env())
             .current_dir(crate_root)
             .output()
             .map_err(|e| MetricError::CommandFailed {
@@ -126,8 +146,11 @@ impl MetricProvider for DeadCodeProvider {
                 source: e,
             })?;
 
-        let stderr = String::from_utf8_lossy(&output.stderr);
-        if !output.status.success() && stderr.contains("error") {
+        let stdout = String::from_utf8_lossy(&output.stdout);
+        let (items, has_error) = self.parse_output(&stdout, crate_root.to_path_buf());
+
+        if has_error || (!output.status.success() && items.is_empty()) {
+            let stderr = String::from_utf8_lossy(&output.stderr);
             return Err(MetricError::CommandExit {
                 command: "cargo check".to_string(),
                 status: output.status.code().unwrap_or(-1),
@@ -135,8 +158,6 @@ impl MetricProvider for DeadCodeProvider {
             });
         }
 
-        let stdout = String::from_utf8_lossy(&output.stdout);
-        let items = self.parse_messages(&stdout, crate_root.to_path_buf());
         Ok(ProviderOutput::DeadCode(items))
     }
 }
