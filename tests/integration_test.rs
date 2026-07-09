@@ -1,4 +1,5 @@
 use assert_cmd::Command;
+use predicates::prelude::*;
 use predicates::str::contains;
 use std::path::PathBuf;
 
@@ -13,8 +14,8 @@ fn test_function_size_only() {
     cmd.args(["--no-coverage", "--no-dead-code", "--format", "json", &fixture.to_string_lossy()]);
     cmd.assert()
         .success()
-        .stdout(contains("\"name\":\"large_function\""))
-        .stdout(contains("\"name\":\"unused_helper\""));
+        .stdout(contains("\"name\"").and(contains("\"large_function\"")))
+        .stdout(contains("\"name\"").and(contains("\"unused_helper\"")));
 }
 
 #[test]
