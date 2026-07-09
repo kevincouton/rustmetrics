@@ -3,7 +3,9 @@ use std::path::PathBuf;
 
 #[derive(Debug, Parser)]
 #[command(name = "rustmetrics")]
-#[command(about = "Aggregate test coverage, dead code, and function-size metrics for Rust projects")]
+#[command(
+    about = "Aggregate test coverage, dead code, and function-size metrics for Rust projects"
+)]
 pub struct Args {
     /// Path to the crate to analyze.
     #[arg(default_value = ".")]

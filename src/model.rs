@@ -72,7 +72,10 @@ mod tests {
 
     #[test]
     fn severity_serializes_to_lowercase() {
-        assert_eq!(serde_json::to_string(&Severity::Error).unwrap(), "\"error\"");
+        assert_eq!(
+            serde_json::to_string(&Severity::Error).unwrap(),
+            "\"error\""
+        );
         assert_eq!(
             serde_json::to_string(&Severity::Warning).unwrap(),
             "\"warning\""

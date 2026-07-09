@@ -1,5 +1,5 @@
-use rustmetrics::cli::Args;
 use clap::Parser;
+use rustmetrics::cli::Args;
 
 #[test]
 fn test_parse_defaults() {
