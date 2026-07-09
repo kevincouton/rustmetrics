@@ -1,5 +1,5 @@
 use rustmetrics::model::Report;
-use rustmetrics::reporter::{reporter_for, Reporter};
+use rustmetrics::reporter::reporter_for;
 use std::path::PathBuf;
 
 #[test]
