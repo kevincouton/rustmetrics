@@ -1,1 +1,17 @@
 # Subagent-Driven Development Progress Ledger
+Task 1: complete (commits 0b533e9..0b533e9 scaffold, review clean)
+Task 2: complete (commits 0b533e9..6517f20, review clean)
+Task 3: complete (commits 6517f20..8672aff, review clean)
+Minor finding (Task 3): partial provider tables reset command/rustflags to empty strings due to #[serde(default)] — needs final-review triage
+Task 4: complete (commits 8672aff..8b5e3a2, review clean)
+Task 5: needs fixes (commits 8b5e3a2..96164b3, reviewer found Important issues)
+Task 5: complete (commits 8b5e3a2..d0ba3cb incl. fix, review clean)
+Task 6: complete (commits d0ba3cb..7db0848, review clean)
+Task 7: complete (commits 7db0848..57b9cf2, review clean)
+Task 8: complete (commits 57b9cf2..6027f97, review clean)
+Task 9: complete (commits 6027f97..86f43a5, review clean)
+Task 10: complete (commits 86f43a5..a5ac640, review clean)
+Task 11: complete (commits a5ac640..c16bf4c, review clean)
+Task 12: complete (commits c16bf4c..d033da7, review clean)
+Task 13: complete (commits d033da7..3846039, review clean)
+Final review fixes: complete (commits 3846039..7c5a7e2, review clean)
