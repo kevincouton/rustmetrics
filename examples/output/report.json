@@ -1,0 +1,40 @@
+{
+  "crate_root": "tests/fixtures/minimal_crate",
+  "coverage": null,
+  "dead_code": [],
+  "function_sizes": [
+    {
+      "file": "src/lib.rs",
+      "name": "add",
+      "line_start": 1,
+      "line_end": 3,
+      "line_count": 3,
+      "statement_count": 0
+    },
+    {
+      "file": "src/lib.rs",
+      "name": "unused_helper",
+      "line_start": 5,
+      "line_end": 7,
+      "line_count": 3,
+      "statement_count": 0
+    },
+    {
+      "file": "src/lib.rs",
+      "name": "large_function",
+      "line_start": 9,
+      "line_end": 22,
+      "line_count": 14,
+      "statement_count": 11
+    },
+    {
+      "file": "tests/basic.rs",
+      "name": "test_add",
+      "line_start": 4,
+      "line_end": 6,
+      "line_count": 3,
+      "statement_count": 1
+    }
+  ],
+  "threshold_violations": []
+}
