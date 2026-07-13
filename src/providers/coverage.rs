@@ -109,6 +109,12 @@ impl MetricProvider for CoverageProvider {
 
         let stdout = String::from_utf8_lossy(&output.stdout);
         let summary = self.parse_json(&stdout)?;
+        eprintln!(
+            "coverage: {:.1}% lines covered ({} / {})",
+            summary.line_rate * 100.0,
+            summary.lines_covered,
+            summary.lines_total
+        );
         Ok(ProviderOutput::Coverage(summary))
     }
 }

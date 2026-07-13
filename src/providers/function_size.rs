@@ -144,6 +144,7 @@ impl MetricProvider for FunctionSizeProvider {
 
     fn collect(&self, crate_root: &Path) -> Result<ProviderOutput, MetricError> {
         let mut metrics = Vec::new();
+        let mut files_scanned = 0;
 
         for entry in walkdir::WalkDir::new(crate_root)
             .into_iter()
@@ -153,7 +154,7 @@ impl MetricProvider for FunctionSizeProvider {
             if path.extension().and_then(|e| e.to_str()) != Some("rs") {
                 continue;
             }
-            if path.components().any(|c| c.as_os_str() == "target") {
+            if should_skip_file(path, crate_root) {
                 continue;
             }
 
@@ -165,10 +166,22 @@ impl MetricProvider for FunctionSizeProvider {
                 }
             };
 
+            files_scanned += 1;
             let relative = path.strip_prefix(crate_root).unwrap_or(path).to_path_buf();
             metrics.extend(self.analyze_source(&source, relative));
         }
 
+        eprintln!("function_size: scanned {} source files", files_scanned);
         Ok(ProviderOutput::FunctionSizes(metrics))
     }
+}
+
+/// Skip build artifacts and non-production code so metrics focus on the crate itself.
+fn should_skip_file(path: &Path, crate_root: &Path) -> bool {
+    let relative = path.strip_prefix(crate_root).unwrap_or(path);
+    let excluded = ["target", "tests", "examples", "benches", "fixtures"];
+    relative
+        .components()
+        .filter_map(|c| c.as_os_str().to_str())
+        .any(|part| excluded.contains(&part))
 }

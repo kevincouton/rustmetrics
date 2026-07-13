@@ -158,6 +158,7 @@ impl MetricProvider for DeadCodeProvider {
             });
         }
 
+        eprintln!("dead_code: found {} dead-code item(s)", items.len());
         Ok(ProviderOutput::DeadCode(items))
     }
 }
