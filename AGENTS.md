@@ -47,3 +47,13 @@ cargo run -- tests/fixtures/minimal_crate
 ## CI Expectations
 
 The GitHub Actions workflow enforces formatting, clippy, tests, and release build. Keep all four green.
+
+Run the CI workflow locally with [act](https://github.com/nektos/act):
+
+```bash
+act
+# or target only the check job
+act -j check
+```
+
+The `.actrc` file sets `--container-architecture linux/amd64` and `--action-offline-mode` for faster local runs.

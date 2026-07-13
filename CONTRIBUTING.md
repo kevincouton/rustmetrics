@@ -30,6 +30,16 @@ cargo test
 - Write tests for new behavior
 - Update documentation and examples as needed
 
+## Local CI
+
+You can run the GitHub Actions workflow locally with [act](https://github.com/nektos/act):
+
+```bash
+act
+```
+
+The repository includes an `.actrc` with sensible defaults.
+
 ## Reporting Issues
 
 Use the issue templates for bug reports and feature requests.
