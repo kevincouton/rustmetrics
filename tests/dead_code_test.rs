@@ -30,3 +30,20 @@ fn test_parse_dead_code_messages_skips_compiler_errors() {
     assert_eq!(items[0].line, 7);
     assert_eq!(items[0].column, 1);
 }
+
+#[test]
+fn test_parse_dead_code_messages_various_item_kinds() {
+    let provider = DeadCodeProvider::new("-W dead_code".to_string());
+    let jsonl = r#"
+{"reason":"compiler-message","message":{"spans":[{"file_name":"src/lib.rs","line_start":1,"column_start":1}],"code":{"code":"dead_code"},"level":"warning","message":"struct `UnusedStruct` is never used"}}
+{"reason":"compiler-message","message":{"spans":[{"file_name":"src/lib.rs","line_start":2,"column_start":1}],"code":{"code":"dead_code"},"level":"warning","message":"enum `UnusedEnum` is never used"}}
+{"reason":"compiler-message","message":{"spans":[{"file_name":"src/lib.rs","line_start":3,"column_start":1}],"code":{"code":"dead_code"},"level":"warning","message":"static `UNUSED_STATIC` is never used"}}
+{"reason":"compiler-message","message":{"spans":[{"file_name":"src/lib.rs","line_start":4,"column_start":1}],"code":{"code":"dead_code"},"level":"warning","message":"type alias `UnusedType` is never used"}}
+"#;
+    let items = provider.parse_messages(jsonl, PathBuf::from("/tmp/my-crate"));
+    assert_eq!(items.len(), 4);
+    assert_eq!(items[0].item_kind, "struct");
+    assert_eq!(items[1].item_kind, "enum");
+    assert_eq!(items[2].item_kind, "static");
+    assert_eq!(items[3].item_kind, "item");
+}

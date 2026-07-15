@@ -26,3 +26,9 @@ fn test_parse_options() {
     assert!(args.no_dead_code);
     assert_eq!(args.crate_root, std::path::PathBuf::from("/tmp/my-crate"));
 }
+
+#[test]
+fn test_crate_root_accessor() {
+    let args = Args::parse_from(["rustmetrics", "/tmp/my-crate"]);
+    assert_eq!(args.crate_root(), std::path::PathBuf::from("/tmp/my-crate"));
+}

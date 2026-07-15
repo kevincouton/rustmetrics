@@ -14,7 +14,13 @@ pub use runner::Runner;
 use crate::reporter::reporter_for;
 use anyhow::Result;
 
-pub fn run(args: Args) -> Result<()> {
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum RunStatus {
+    Ok,
+    ThresholdViolations,
+}
+
+pub fn run(args: Args) -> Result<RunStatus> {
     let config = Config::load(args.config.as_deref())?;
     let runner = Runner::new(config, args);
     let report = runner.run()?;
@@ -23,8 +29,8 @@ pub fn run(args: Args) -> Result<()> {
     println!("{}", reporter.render(&report));
 
     if report.threshold_violations.is_empty() {
-        Ok(())
+        Ok(RunStatus::Ok)
     } else {
-        std::process::exit(1);
+        Ok(RunStatus::ThresholdViolations)
     }
 }

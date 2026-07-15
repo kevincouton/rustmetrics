@@ -29,6 +29,19 @@ max_function_lines = 50
 }
 
 #[test]
+fn test_default_config_values() {
+    let cfg = Config::default();
+    assert!(cfg.providers.coverage.enabled);
+    assert_eq!(cfg.providers.coverage.command, "cargo-llvm-cov");
+    assert!(cfg.providers.dead_code.enabled);
+    assert_eq!(cfg.providers.dead_code.rustflags, "-W dead_code");
+    assert!(cfg.providers.function_size.enabled);
+    assert_eq!(cfg.thresholds.min_line_coverage, Some(0.80));
+    assert_eq!(cfg.thresholds.max_function_lines, Some(100));
+    assert_eq!(cfg.thresholds.max_dead_code_items, Some(0));
+}
+
+#[test]
 fn test_partial_provider_table_preserves_string_defaults() {
     let toml = r#"
 [providers.coverage]
