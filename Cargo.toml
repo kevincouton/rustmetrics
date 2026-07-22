@@ -2,10 +2,14 @@
 name = "rustmetrics"
 version = "0.1.0"
 edition = "2021"
-authors = ["Your Name <you@example.com>"]
+authors = ["Kevin Couton"]
 description = "Aggregates test coverage, dead code, and function-size metrics for Rust projects."
 license = "MIT OR Apache-2.0"
-repository = "https://github.com/example/rustmetrics"
+repository = "https://github.com/kevincouton/rustmetrics"
+homepage = "https://github.com/kevincouton/rustmetrics"
+readme = "README.md"
+keywords = ["metrics", "coverage", "dead-code", "ci", "code-quality"]
+categories = ["development-tools"]
 
 [dependencies]
 clap = { version = "4.5", features = ["derive"] }
