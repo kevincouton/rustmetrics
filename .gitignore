@@ -1,5 +1,4 @@
 /target
-Cargo.lock
 .superpowers/
 tests/fixtures/*/target/
 tests/fixtures/*/Cargo.lock
