@@ -1,0 +1,24 @@
+# cargo-deny configuration for rustmetrics (dual-licensed MIT OR Apache-2.0)
+
+[advisories]
+# Defaults: fetch the RustSec advisory DB and fail on vulnerabilities.
+
+[bans]
+multiple-versions = "warn"
+wildcards = "warn"
+deny = [
+  # Disallow git-sourced dependencies so every dep is auditable via crates.io.
+]
+
+[licenses]
+allow = [
+  "MIT",
+  "Apache-2.0",
+  # unicode-ident (transitive dep of syn/proc-macro2) carries this alongside MIT/Apache-2.0.
+  "Unicode-3.0",
+]
+
+[sources]
+unknown-registry = "deny"
+unknown-git = "deny"
+allow-registry = ["https://github.com/rust-lang/crates.io-index"]
