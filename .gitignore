@@ -2,3 +2,6 @@
 .superpowers/
 tests/fixtures/*/target/
 tests/fixtures/*/Cargo.lock
+node_modules/
+.output/
+dist/
