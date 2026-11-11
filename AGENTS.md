@@ -1,5 +1,7 @@
 # Agent Guide for rustmetrics
 
+Rust style house standard: see [RUST_STYLE.md](RUST_STYLE.md) (Google Rust Style Guide).
+
 ## Quick Start
 
 ```bash

@@ -26,3 +26,11 @@ anyhow = "1.0"
 assert_cmd = "2.0"
 predicates = "3.1"
 tempfile = "3.10"
+
+[lints.clippy]
+# Google Rust Style Guide aligned lints (see RUST_STYLE.md)
+wildcard_imports = "deny"
+uninlined_format_args = "deny"
+implicit_clone = "deny"
+redundant_field_names = "deny"
+ptr_arg = "deny"

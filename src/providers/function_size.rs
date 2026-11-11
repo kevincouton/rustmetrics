@@ -171,7 +171,7 @@ impl MetricProvider for FunctionSizeProvider {
             metrics.extend(self.analyze_source(&source, relative));
         }
 
-        eprintln!("function_size: scanned {} source files", files_scanned);
+        eprintln!("function_size: scanned {files_scanned} source files");
         Ok(ProviderOutput::FunctionSizes(metrics))
     }
 }
